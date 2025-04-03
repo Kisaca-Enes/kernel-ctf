@@ -1,0 +1,63 @@
+gdb ./ana_stack
+checksec --fortify-file=ana_stack:
+
+strings ana_stack | grep FLAG:
+
+ltrace ./ana_stack
+format string
+overflow test
+
+leak libc
+
+rop gadgets
+exploit
+
+
+    hint:
+
+        Bu komut, kullanıcıya bir ipucu verir. Örneğin, buffer overflow açığını bulmaya yönelik bir hint sağlar ve Stack Canary'nin nasıl atlanacağı hakkında bilgi verir.
+
+    gdb ./ana_stack:
+
+        Bu komut, GDB (GNU Debugger) kullanarak ana_stack programını başlatır. Güvenlik mekanizmalarını kontrol eder (PIE, ASLR, NX, Stack Canary). Ayrıca, buffer overflow açığının olup olmadığını tespit etmek için programda inceleme yapmaya başlar.
+
+    checksec --fortify-file=ana_stack:
+
+        Bu komut, programın güvenlik özelliklerini kontrol eder. Programın ASLR, PIE, NX (Non-Executable Stack), Canary gibi güvenlik özelliklerini denetler ve bu özelliklerin aktif olup olmadığını gösterir.
+
+    strings ana_stack | grep FLAG:
+
+        Bu komut, ana_stack binary dosyasındaki metinleri arar ve içerisinde FLAG kelimesi geçip geçmediğini kontrol eder. Eğer FLAG varsa, bu, genellikle CTF yarışmalarında çözüm için gereken flag bilgisini bulma amacı taşır.
+
+    ltrace ./ana_stack:
+
+        Bu komut, ana_stack programını ltrace ile çalıştırarak, programın kullandığı kütüphane fonksiyonlarını (system çağrıları gibi) izler. Bu, giriş doğrulama gibi potansiyel hataların tespit edilmesine yardımcı olabilir.
+
+    format string:
+
+        Bu komut, format string saldırılarını tetiklemeyi amaçlar. Format string saldırılarında, özellikle printf gibi fonksiyonlar kullanılarak bellekteki veriler manipüle edilebilir. Burada, Canary değerinin tespit edilmesi amacıyla kullanılan bir testtir.
+
+    overflow test:
+
+        Bu komut, buffer overflow (bellek taşması) hatasını test eder. Eğer bir buffer overflow hatası tespit edilirse, ancak Stack Canary devrede olduğu için bu hata başarılı olamaz. Bu komutla, Canary’nin engellediği gözlemlenir.
+
+    leak libc:
+
+        Bu komut, libc (C Standard Library) adresinin sızdırılmasını sağlar. Bu tür bilgilerin sızdırılması, genellikle programın belleğindeki adresleri manipüle ederek saldırılar düzenlemeyi amaçlayan bir adımdır.
+
+    rop gadgets:
+
+        Bu komut, Return-Oriented Programming (ROP) gadget’larını arar. ROP, stack overflows gibi hatalardan yararlanarak, işlevlerin kötüye kullanımına yönelik bir tekniktir. Bu komut, ROP kullanmak için kullanılabilir gadget'ları listeler (örneğin: pop rdi; ret).
+
+    exploit:
+
+        Bu komut, kullanıcıya exploit kodu yazmak için bir alan açar. Bu, güvenlik açığına yönelik hazırlanan exploit’i girmeyi sağlar. Bu komut çalıştırıldığında, exploit kodu yazılmaya başlanabilir ve kullanıcı başarıyla exploit’i çalıştırabilir.
+
+
+
+
+Senaryo:
+
+Bir grup hacktivist, devletin kritik verilerini koruyan bir sistemdeki güvenlik açıklarını tespit etti. Bu açıkları kullanarak, hükümetin en gizli verilerine ulaşmayı planlıyorlar. Ancak bu plan için en önemli adım, "Ana Stack" adlı bir sunucuyu ele geçirmektir. Sunucu, her ne kadar yüksek güvenlik önlemleriyle korunuyor olsa da, bazı zayıf noktalar hala mevcut.
+
+Bir güvenlik araştırmacısı (yani yarışmacılar), bu sunucuyu ele geçirmek için gerekli adımları takip etmeye başlar. İlk adım, sistemin temel güvenlik özelliklerini test etmek ve bu testlerden elde edilen verilerle zafiyetleri kullanarak sisteme girmektir. Araştırmacılar, sistemdeki çeşitli güvenlik mekanizmalarını aşmak zorundadır: Stack Canary, ASLR (Address Space Layout Randomization), PIE (Position Independent Executable) gibi engelleri aşarak, sonrasında şifreli veriye ulaşmak için gerekli exploit kodlarını yazmalıdır.
